@@ -17,13 +17,13 @@ class ModelLoader:
             if os.path.exists(fixed_model_path):
                 model_path = fixed_model_path
                 print(f"Using fixed model at {model_path}")
-            
+
             if not os.path.exists(model_path):
                 raise FileNotFoundError(f"Model file not found at {model_path}")
-            
+
             print(f"Loading model from {model_path} using Keras {keras.__version__}...")
-            # Load the model with compile=False for inference
-            self._model = keras.models.load_model(model_path, compile=False)
+            # Load with safe_mode=False to handle cross-version config fields
+            self._model = keras.models.load_model(model_path, compile=False, safe_mode=False)
             print("Model loaded successfully.")
         return self._model
 

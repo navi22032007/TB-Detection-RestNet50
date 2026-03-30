@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-slate-950 text-slate-100 font-sans antialiased;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(30, 64, 175, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(14, 116, 144, 0.1) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl;
+  }
+  .glass-card-solid {
+    @apply bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl;
+  }
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold
+           px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-blue-900/30
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600;
+  }
+  .badge-tb {
+    @apply bg-red-500/20 text-red-300 border border-red-500/30 px-4 py-1.5 rounded-full
+           font-semibold text-sm tracking-wide uppercase;
+  }
+  .badge-normal {
+    @apply bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-4 py-1.5 rounded-full
+           font-semibold text-sm tracking-wide uppercase;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+/* Drop zone active state */
+.drop-zone-active {
+  @apply border-blue-400 bg-blue-500/10;
+}
