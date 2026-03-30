@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import tensorflow as tf
+import keras
 from PIL import Image
 import io
 import base64
@@ -61,15 +62,15 @@ class ImageProcessor:
         resnet = model.layers[0] # The ResNet50 Functional model
         
         last_conv_layer = resnet.get_layer(last_conv_layer_name)
-        last_conv_layer_model = tf.keras.Model(resnet.inputs, last_conv_layer.output)
+        last_conv_layer_model = keras.Model(resnet.inputs, last_conv_layer.output)
 
         # 2. Create a model that maps the activations of the last conv layer to the final predictions
-        classifier_input = tf.keras.Input(shape=last_conv_layer.output.shape[1:])
+        classifier_input = keras.Input(shape=last_conv_layer.output.shape[1:])
         x = classifier_input
         # Replay the rest of the Sequential model starting after the ResNet50
         for layer in model.layers[1:]:
             x = layer(x)
-        classifier_model = tf.keras.Model(classifier_input, x)
+        classifier_model = keras.Model(classifier_input, x)
 
         # 3. Compute the gradient of the top predicted class for our input image 
         # with respect to the activations of the last conv layer
@@ -114,13 +115,13 @@ class ImageProcessor:
         jet_heatmap = jet_colors[heatmap]
 
         # Create an image with RGB colorized heatmap
-        jet_heatmap = tf.keras.preprocessing.image.array_to_img(jet_heatmap)
+        jet_heatmap = keras.utils.array_to_img(jet_heatmap)
         jet_heatmap = jet_heatmap.resize((img.shape[1], img.shape[0]))
-        jet_heatmap = tf.keras.preprocessing.image.img_to_array(jet_heatmap)
+        jet_heatmap = keras.utils.img_to_array(jet_heatmap)
 
         # Superimpose the heatmap on original image
         superimposed_img = jet_heatmap * alpha + img
-        superimposed_img = tf.keras.preprocessing.image.array_to_img(superimposed_img)
+        superimposed_img = keras.utils.array_to_img(superimposed_img)
         superimposed_img = np.array(superimposed_img)
 
         return jet_heatmap, superimposed_img

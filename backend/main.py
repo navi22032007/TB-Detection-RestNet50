@@ -1,7 +1,10 @@
+import os
+os.environ["TF_USE_LEGACY_KERAS"] = "1"
+
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from .model_loader import model_loader
-from .processor import processor
+from model_loader import model_loader
+from processor import processor
 import os
 
 app = FastAPI(title="TB Detection API")
@@ -15,7 +18,7 @@ app.add_middleware(
 )
 
 # Configuration
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "model", "OGbest_model.keras")
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "model", "fixed_model.keras")
 
 @app.on_event("startup")
 async def startup_event():
