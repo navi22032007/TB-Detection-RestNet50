@@ -18,7 +18,7 @@ app.add_middleware(
 )
 
 # Configuration
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "model", "fixed_model.keras")
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "model", "OGbest_model.keras")
 
 @app.on_event("startup")
 async def startup_event():
