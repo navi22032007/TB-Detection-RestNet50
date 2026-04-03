@@ -37,15 +37,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Jules AI Test Generation
-        # Jules analyzes your backend code and suggests/writes edge case tests
-        uses: google-labs-code/jules-invoke@v1
-        with:
-          prompt: |
-            Look at the Python code in the 'backend' folder of this PR. 
-            Identify critical edge cases (empty inputs, long strings, injection).
-            Write Pytest cases for these and save them to backend/tests/test_generated.py.
-          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
 
       - name: Run Logic & Edge Case Tests
+
         run: pytest tests/ --cov=.

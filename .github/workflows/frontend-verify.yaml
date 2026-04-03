@@ -39,16 +39,8 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Jules UI Test Generation
-        # Jules writes component tests for your React UI
-        uses: google-labs-code/jules-invoke@v1
-        with:
-          prompt: |
-            Analyze the React components in the 'frontend' folder. 
-            Identify critical UI edge cases (loading states, empty lists, button debouncing).
-            Write Vitest/Jest unit tests and save them to frontend/src/__tests__/generated.test.tsx.
-          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
 
       - name: Run Unit Tests
+
         # Runs your test suite (Vitest or Jest)
         run: npm test -- --coverage
