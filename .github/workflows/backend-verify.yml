@@ -1,0 +1,43 @@
+name: Backend Verification
+on:
+  push:
+    branches:
+      - '**'        # Triggers on every push to any branch
+    paths:
+      - 'backend/**'
+  pull_request:
+    paths:
+      - 'backend/**' # Only triggers if files in the backend folder change
+
+jobs:
+  test-and-scan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend # Runs all commands inside the backend folder
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install ruff pytest pytest-cov snyk
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Lint with Ruff
+        run: ruff check . --fix
+
+      - name: Snyk Security Scan
+        run: snyk test --severity-threshold=high
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+
+      - name: Run Logic & Edge Case Tests
+
+        run: pytest tests/ --cov=.
