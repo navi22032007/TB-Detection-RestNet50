@@ -20,7 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
+# Static directory for dynamic images
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 if not os.path.exists(static_dir):
     os.makedirs(static_dir)
@@ -117,6 +117,18 @@ async def model_info():
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
+
+# Mount built frontend dist (for production)
+frontend_dist = os.path.join(os.path.dirname(__file__), "..", "frontend-dist")
+if os.path.exists(frontend_dist):
+    # This must be at the end of the file so it doesn't catch the /api routes
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
+    
+    # Catch-all route to serve index.html for SPA (React Router support)
+    from fastapi.responses import FileResponse
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        return FileResponse(os.path.join(frontend_dist, "index.html"))
 
 if __name__ == "__main__":
     import uvicorn
